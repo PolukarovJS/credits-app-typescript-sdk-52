@@ -1,7 +1,7 @@
 import React, { FC, Fragment, useCallback, useEffect, useState } from 'react'
 import { StyleSheet, View, ScrollView, RefreshControl, useColorScheme, Alert } from 'react-native'
 import { useAppSelector, useAppDispatch } from '../hooks/hook'
-import { deleteCreditAsync, getCreditsAsync, setSelectedCredit } from '../redux/reducers/credits-reducer'
+import { deleteCreditAsync, getCreditsAsync, setSelectedCredit } from '../../src/redux/reducers/credits-reducer'
 import { CreditType } from '../types'
 import Loader from '../../components/ui/Loader'
 import Padding from '../../components/ui/Padding'

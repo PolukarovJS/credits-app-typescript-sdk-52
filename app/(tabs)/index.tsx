@@ -1,7 +1,7 @@
 import { AntDesign, FontAwesome, Foundation } from '@expo/vector-icons'
 import React, { FC, useEffect, useState } from 'react'
 import { Alert, StyleSheet, Text, TextInput, View, useColorScheme } from 'react-native'
-import { createCreditAsync, getCreditsAsync, setTempCredit } from '../redux/reducers/credits-reducer'
+import { createCreditAsync, getCreditsAsync, setTempCredit } from '../../src/redux/reducers/credits-reducer'
 import { AppButton } from '../../components/ui/AppButton'
 import { AppDateInput } from '../../components/ui/AppDateInput'
 import { AppTextBold } from '../../components/ui/AppTextBold'

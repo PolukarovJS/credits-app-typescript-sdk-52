@@ -22,7 +22,7 @@ import {
     getCreditsAsync,
     setSelectedCredit,
     updateCreditAsync,
-} from './redux/reducers/credits-reducer'
+} from '../src/redux/reducers/credits-reducer'
 import { useRouter } from 'expo-router'
 import { useAppDispatch, useAppSelector } from './hooks/hook'
 import Loader from '../components/ui/Loader'

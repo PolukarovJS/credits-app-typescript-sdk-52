@@ -5,10 +5,10 @@ import { SplashScreen, Stack } from 'expo-router'
 import { useEffect } from 'react'
 import { useColorScheme } from 'react-native'
 import { Provider } from 'react-redux'
-import { store } from './redux/redux-store'
+import { store } from '../src/redux/redux-store'
 import { useDataBase } from './hooks/useBase'
 import { useAppDispatch } from './hooks/hook'
-import { getCreditsAsync } from './redux/reducers/credits-reducer'
+import { getCreditsAsync } from '../src/redux/reducers/credits-reducer'
 import { COLORS } from '../constants/theme'
 
 export {

@@ -16,7 +16,7 @@ import { AppTextBold } from '../../components/ui/AppTextBold'
 import { AppDateInput } from '../../components/ui/AppDateInput'
 import { Foundation } from '@expo/vector-icons'
 import { COLORS, SIZES } from '../../constants'
-import { createRepaymentAsync, getCreditsAsync, setIsLoading } from '../redux/reducers/credits-reducer'
+import { createRepaymentAsync, getCreditsAsync, setIsLoading } from '../../src/redux/reducers/credits-reducer'
 
 const Services: FC = () => {
     // console.log('Selected ServicesScreen')
