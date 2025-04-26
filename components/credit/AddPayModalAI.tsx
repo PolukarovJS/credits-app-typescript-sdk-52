@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     input: {
-        padding: 10,
+        paddingLeft: 10,
         width: '80%',
         fontSize: 20,
         fontFamily: 'roboto-bold',

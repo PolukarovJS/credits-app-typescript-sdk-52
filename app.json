@@ -1,10 +1,5 @@
 {
   "expo": {
-    "androidStatusBar": {
-      "backgroundColor": "#000000",
-      "translucent": true,
-      "barStyle": "light-content"
-    },
     "name": "credits-app-typescript-sdk-52",
     "slug": "credits-app-typescript-sdk-52",
     "version": "1.0.0",
