@@ -1,6 +1,6 @@
 import { AntDesign, FontAwesome, Foundation } from '@expo/vector-icons'
 import React, { FC, useState } from 'react'
-import { Alert, StyleSheet, Text, TextInput, View, useColorScheme } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, TextInput, View, useColorScheme } from 'react-native'
 import { createCreditAsync, getCreditsAsync } from '../src/redux/reducers/credits-reducer'
 import { AppButton } from '../components/ui/AppButton'
 import { AppDateInput } from '../components/ui/AppDateInput'
@@ -196,7 +196,7 @@ const AddCredit: FC = () => {
     }
 
     return (
-        <>
+        <ScrollView contentContainerStyle={styles.container}>
             {/* Заголовок */}
             <View>
                 <AppTextBold style={{ ...styles.title, ...themeTextStyle }}>
@@ -302,13 +302,16 @@ const AddCredit: FC = () => {
                 </AppButton>
                 <AppButton onPress={saveHandler}>Добавить кредит</AppButton>
             </View>
-        </>
+        </ScrollView>
     )
 }
 
 export default AddCredit
 
 const styles = StyleSheet.create({
+    container: {
+        paddingBottom: 20,
+    },
     title: {
         paddingVertical: 25,
         textAlign: 'center',
