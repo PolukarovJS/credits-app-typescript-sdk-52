@@ -1,5 +1,5 @@
-import React, { FC, Fragment, useCallback, useEffect, useState } from 'react'
-import { StyleSheet, View, ScrollView, RefreshControl, useColorScheme, Alert } from 'react-native'
+import React, { FC, useCallback, useEffect, useState } from 'react'
+import { StyleSheet, View, useColorScheme, Alert, FlatList } from 'react-native'
 import { useAppSelector, useAppDispatch } from '../../src/hooks/hook'
 import { deleteCreditAsync, getCreditsAsync, setSelectedCredit } from '../../src/redux/reducers/credits-reducer'
 import { CreditType } from '../../src/types'
@@ -60,60 +60,63 @@ const Credits: FC = () => {
     const themeTextStyle = colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText
     const themeContainerStyle = colorScheme === 'light' ? styles.lightContainer : styles.darkContainer
 
+    const renderItem = ({ item }: { item: CreditType }) => (
+        <CreditItem
+            credit={item}
+            onPress={onPress}
+            onLongPress={onLongPress}
+        />
+    )
+
+    const EmptyComponent = () => (
+        <AppText
+            style={{
+                ...themeTextStyle,
+                textAlign: 'center',
+                fontSize: 25,
+                marginTop: 50,
+            }}
+        >
+            У Вас не кредитов!!!
+        </AppText>
+    )
+
+    const ErrorComponent = () => (
+        <AppText
+            style={{
+                ...themeTextStyle,
+                textAlign: 'center',
+                fontSize: 25,
+                marginTop: 50,
+            }}
+        >
+            {error?.toString()}
+        </AppText>
+    )
+
     return (
         <View style={styles.container}>
             <Padding style={{ ...styles.wrapper, ...themeContainerStyle }}>
                 {isLoading ? (
                     <Loader />
                 ) : error ? (
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                    >
-                        <AppText
-                            style={{
-                                ...themeTextStyle,
-                                textAlign: 'center',
-                                fontSize: 25,
-                                marginTop: 50,
-                            }}
-                        >
-                            {error.toString()}
-                        </AppText>
-                    </ScrollView>
-                ) : credits.length ? (
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                    >
-                        {credits.map((credit) => (
-                            <View key={credit.id}>
-                                <Fragment key={credit.id}>
-                                    <CreditItem
-                                        credit={credit}
-                                        onPress={onPress}
-                                        onLongPress={onLongPress}
-                                    />
-                                </Fragment>
-                            </View>
-                        ))}
-                    </ScrollView>
+                    <FlatList
+                        data={[]}
+                        renderItem={null}
+                        ListEmptyComponent={ErrorComponent}
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
                 ) : (
-                    <ScrollView
+                    <FlatList
+                        data={credits}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.id.toString()}
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        ListEmptyComponent={EmptyComponent}
                         showsVerticalScrollIndicator={false}
-                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                    >
-                        <AppText
-                            style={{
-                                ...themeTextStyle,
-                                textAlign: 'center',
-                                fontSize: 25,
-                                marginTop: 50,
-                            }}
-                        >
-                            У Вас не кредитов!!!
-                        </AppText>
-                    </ScrollView>
+                    />
                 )}
             </Padding>
         </View>
