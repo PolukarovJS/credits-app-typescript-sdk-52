@@ -3,13 +3,13 @@ import { Platform, ScrollView, StyleSheet, LogBox, useColorScheme } from 'react-
 
 import { Text, View } from '../components/Themed'
 import { useEffect, useState } from 'react'
-import { calculateWithEarlyPaymentsRows } from './utils/calculator'
-import { CreditType, RowType, convertICreditRowToRowType } from './types'
+import { calculateWithEarlyPaymentsRows } from './../src/utils/calculator'
+import { CreditType, RowType, convertICreditRowToRowType } from './../src/types'
 
-import { useAppSelector } from './hooks/hook'
+import { useAppSelector } from './../src/hooks/hook'
 import Loader from '../components/ui/Loader'
 import { PaymentScheduleModal } from '../components/credit/PaymentScheduleModal'
-import { transformDate } from './utils/transformDate'
+import { transformDate } from './../src/utils/transformDate'
 import { AppButton } from '../components/ui/AppButton'
 import Padding from '../components/ui/Padding'
 import { AppText } from '../components/ui/AppText'

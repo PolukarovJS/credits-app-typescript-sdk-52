@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
-import { CreditType } from '../../app/types'
-import { transformDateL, transformDateN } from '../../app/utils/transformDate'
+import { CreditType } from '../../src/types'
+import { transformDateL, transformDateN } from '../../src/utils/transformDate'
 import { AppText } from '../ui/AppText'
-import { calculateNumberOfPayOnDate, calculateWithEarlyPaymentsRows } from '../../app/utils/calculator'
+import { calculateNumberOfPayOnDate, calculateWithEarlyPaymentsRows } from '../../src/utils/calculator'
 import { COLORS, SIZES } from '../../constants'
 
 type PropsType = {

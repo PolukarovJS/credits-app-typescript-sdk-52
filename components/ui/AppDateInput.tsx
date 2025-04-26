@@ -5,7 +5,7 @@ import DateTimePicker, {
     Event,
 } from '@react-native-community/datetimepicker'
 import { FontAwesome } from '@expo/vector-icons'
-import { transformDate } from '../../app/utils/transformDate'
+import { transformDate } from '../../src/utils/transformDate'
 import { COLORS, SIZES } from '../../constants'
 
 type PropsType = {

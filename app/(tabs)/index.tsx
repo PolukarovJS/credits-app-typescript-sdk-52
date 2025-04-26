@@ -5,12 +5,12 @@ import { createCreditAsync, getCreditsAsync, setTempCredit } from '../../src/red
 import { AppButton } from '../../components/ui/AppButton'
 import { AppDateInput } from '../../components/ui/AppDateInput'
 import { AppTextBold } from '../../components/ui/AppTextBold'
-import { CreditType, RepaymentType } from '../types'
-import { useAppDispatch, useAppSelector } from '../hooks/hook'
+import { CreditType, RepaymentType } from '../../src/types'
+import { useAppDispatch, useAppSelector } from '../../src/hooks/hook'
 import { COLORS, SIZES } from '../../constants'
-import { creditsAPI } from '../api/credits-api'
+import { creditsAPI } from '../../src/api/credits-api'
 import { AppText } from '../../components/ui/AppText'
-import { currentInfoCredit } from '../utils/calculator'
+import { currentInfoCredit } from '../../src/utils/calculator'
 
 const AddCredit: FC = () => {
     console.log('Selected index.tsx')
@@ -276,14 +276,12 @@ const AddCredit: FC = () => {
                     onPress: async () => {
                         await creditsAPI
                             .deleteCredits()
-                            .then(() =>
-                                console.log('Все кредиты успешно удалены! {index.tsx, deleteAllCredits}')
-                            )
+                        //    .then(() => console.log('Все кредиты успешно удалены! {index.tsx, deleteAllCredits}')                           )
                         // Если БД не существует, то создаем её
-                        await creditsAPI.init().then(() => {
-                            console.log('Database loaded! {index.tsx, deleteAllCredits}')
+                        await creditsAPI.init()
+                           //.then(() => {console.log('Database loaded! {index.tsx, deleteAllCredits}')
                             /* setIsLoadDB(true) */
-                        })
+                        //})
                         dispatch(getCreditsAsync())
                     },
                     style: 'destructive',

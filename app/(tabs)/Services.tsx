@@ -3,15 +3,15 @@ import { Alert, StyleSheet, Text, TextInput, View, useColorScheme } from 'react-
 
 import * as Progress from 'react-native-progress'
 
-import { useAppSelector, useAppDispatch } from '../hooks/hook'
+import { useAppSelector, useAppDispatch } from '../../src/hooks/hook'
 import {
     calculateBenefit,
     calculateNumberOfPayOnDate,
     calculateWithEarlyPaymentsRows,
     randomKeyGenerator,
-} from './../utils/calculator'
+} from './../../src/utils/calculator'
 import { AppButton } from '../../components/ui/AppButton'
-import { CreditCoffType, CreditType, TypeRepayment } from '../types'
+import { CreditCoffType, CreditType, TypeRepayment } from '../../src/types'
 import { AppTextBold } from '../../components/ui/AppTextBold'
 import { AppDateInput } from '../../components/ui/AppDateInput'
 import { Foundation } from '@expo/vector-icons'

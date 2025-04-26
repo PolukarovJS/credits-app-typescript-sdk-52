@@ -1,4 +1,4 @@
-import { transformDateN } from './utils/transformDate'
+import { transformDateN } from './../src/utils/transformDate'
 
 export const LOAD_CREDITS = 'LOAD_CREDITS'
 export const ADD_CREDIT = 'ADD_CREDIT'

@@ -11,8 +11,8 @@ import {
 
 import { Text, View } from '../components/Themed'
 import { useEffect, useState } from 'react'
-import { calculateNumberOfPayOnDate, calculateWithEarlyPaymentsRows } from './utils/calculator'
-import { CreditType, RepaymentType, RowType, TypeRepayment, convertICreditRowToRowType } from './types'
+import { calculateNumberOfPayOnDate, calculateWithEarlyPaymentsRows } from './../src/utils/calculator'
+import { CreditType, RepaymentType, RowType, TypeRepayment, convertICreditRowToRowType } from './../src/types'
 import {
     createHolidayAsync,
     createRepaymentAsync,
@@ -24,13 +24,13 @@ import {
     updateCreditAsync,
 } from '../src/redux/reducers/credits-reducer'
 import { useRouter } from 'expo-router'
-import { useAppDispatch, useAppSelector } from './hooks/hook'
+import { useAppDispatch, useAppSelector } from './../src/hooks/hook'
 import Loader from '../components/ui/Loader'
 import { EditModal } from '../components/credit/EditModal'
 import { PaymentScheduleModal } from '../components/credit/PaymentScheduleModal'
 import { AddPayModal } from '../components/credit/AddPayModalAI'
 import { AppTextBold } from '../components/ui/AppTextBold'
-import { transformDate } from './utils/transformDate'
+import { transformDate } from './../src/utils/transformDate'
 import { Repayment } from '../components/credit/Repayment'
 import { Holiday } from '../components/credit/Holiday'
 import { AppButton } from '../components/ui/AppButton'

@@ -12,7 +12,7 @@ import {
 import { AppButton } from '../ui/AppButton'
 import { AppDateInput } from '../ui/AppDateInput'
 import ComboBox from 'react-native-combobox'
-import { TypeRepayment } from '../../app/types'
+import { TypeRepayment } from '../../src/types'
 import { COLORS, SIZES } from '../../constants'
 
 type PropsType = {

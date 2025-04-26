@@ -5,8 +5,8 @@ import { createCreditAsync, getCreditsAsync } from '../src/redux/reducers/credit
 import { AppButton } from '../components/ui/AppButton'
 import { AppDateInput } from '../components/ui/AppDateInput'
 import { AppTextBold } from '../components/ui/AppTextBold'
-import { CreditType, HolidayType, RepaymentType } from './types'
-import { useAppDispatch } from './hooks/hook'
+import { CreditType, HolidayType, RepaymentType } from './../src/types'
+import { useAppDispatch } from './../src/hooks/hook'
 import { COLORS, SIZES } from '../constants'
 
 const AddCredit: FC = () => {
