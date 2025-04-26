@@ -8,7 +8,7 @@ export function useDataBase(): [boolean, Error | null, () => void] {
     useEffect(() => {
         async function prepare() {
             // Если БД не существует, то создаем её
-            creditsAPI
+            await creditsAPI
                 .init()
                 //.then(() => {
                 //    console.log('Database loaded!')
@@ -21,7 +21,7 @@ export function useDataBase(): [boolean, Error | null, () => void] {
     }, [])
     const deleteBD = async () => {
         // Для удаления БД
-        creditsAPI.deleteCredits()
+        await creditsAPI.deleteCredits()
     }
     return [isLoadDB, errorDB, deleteBD]
 }
