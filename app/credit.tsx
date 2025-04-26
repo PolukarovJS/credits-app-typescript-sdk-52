@@ -1,3 +1,4 @@
+import React, { useMemo, useCallback } from 'react';
 import { StatusBar } from 'expo-status-bar'
 import {
     Dimensions,

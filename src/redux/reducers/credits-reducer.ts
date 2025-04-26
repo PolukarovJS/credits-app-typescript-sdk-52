@@ -3,6 +3,8 @@ import { Alert } from 'react-native'
 import { creditsAPI } from '../../api/credits-api'
 import { HolidayType, CreditType, RepaymentType, TypeRepayment } from '../../../src/types'
 import { AppThunk } from '../redux-store'
+import { createSelector } from 'reselect';
+import { RootState } from '../redux-store';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as SQLite from 'expo-sqlite'
 const initialState = {
@@ -431,3 +433,22 @@ export const setTempCredit = (credit: CreditType): AppThunk => {
 }
 
 export default creditsSlice.reducer
+
+export const selectAllCredits = (state: RootState) => state.creditsPage.credits;
+
+export const selectCreditById = createSelector(
+    [selectAllCredits, (_, creditId: number) => creditId],
+    (credits, creditId) => credits.find(credit => credit.id === creditId)
+  );
+  
+export const selectTotalPayment = createSelector(
+    [selectAllCredits],
+    (credits) => {
+      return credits.reduce((total, credit) => {
+        const payment = credit.sum * 
+          (credit.percents / 1200 + 
+           credit.percents / 1200 / ((1 + credit.percents / 1200) ** credit.term - 1));
+        return total + payment;
+      }, 0);
+    }
+  );

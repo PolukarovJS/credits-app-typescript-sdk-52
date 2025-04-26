@@ -182,59 +182,7 @@ const AddCredit: FC = () => {
         setPercents((parseFloat(percents) || '').toString())
     }
 
-    const styles = StyleSheet.create({
-        title: {
-            paddingVertical: 25,
-            textAlign: 'center',
-            fontSize: 25,
-            fontWeight: 'bold',
-        },
-        input: {
-            padding: 10,
-            width: '100%',
-            fontSize: 20,
-            fontFamily: 'roboto-bold',
-        },
-        buttons: {
-            width: '100%',
-            marginTop: 20,
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-        },
-        block: {
-            marginLeft: 20,
-            flexDirection: 'row',
-            height: 50,
-            alignItems: 'center',
-            marginBottom: 15,
-            borderBottomColor: COLORS.MAIN_BLUE_5,
-            borderBottomWidth: 2,
-            width: '90%',
-        },
-        text: {
-            fontSize: SIZES.large,
-        },
-        comment: {
-            fontSize: SIZES.small,
-        },
-        textBlock: {
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            marginLeft: 25,
-        },
-        lightContainer: {
-            backgroundColor: COLORS.MAIN_BLUE_2,
-        },
-        darkContainer: {
-            backgroundColor: COLORS.MAIN_BLACK_0,
-        },
-        lightThemeText: {
-            color: COLORS.MAIN_BLACK_0,
-        },
-        darkThemeText: {
-            color: COLORS.MAIN_BLUE_2,
-        },
-    })
+   
 
     const colorScheme = useColorScheme()
 
@@ -359,3 +307,57 @@ const AddCredit: FC = () => {
 }
 
 export default AddCredit
+
+const styles = StyleSheet.create({
+    title: {
+        paddingVertical: 25,
+        textAlign: 'center',
+        fontSize: 25,
+        fontWeight: 'bold',
+    },
+    input: {
+        paddingLeft: 10,
+        width: '100%',
+        fontSize: 20,
+        fontFamily: 'roboto-bold',
+    },
+    buttons: {
+        width: '100%',
+        marginTop: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    block: {
+        marginLeft: 20,
+        flexDirection: 'row',
+        height: 50,
+        alignItems: 'center',
+        marginBottom: 15,
+        borderBottomColor: COLORS.MAIN_BLUE_5,
+        borderBottomWidth: 2,
+        width: '90%',
+    },
+    text: {
+        fontSize: SIZES.large,
+    },
+    comment: {
+        fontSize: SIZES.small,
+    },
+    textBlock: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginLeft: 25,
+    },
+    lightContainer: {
+        backgroundColor: COLORS.MAIN_BLUE_2,
+    },
+    darkContainer: {
+        backgroundColor: COLORS.MAIN_BLACK_0,
+    },
+    lightThemeText: {
+        color: COLORS.MAIN_BLACK_0,
+    },
+    darkThemeText: {
+        color: COLORS.MAIN_BLUE_2,
+    },
+})

@@ -1,5 +1,5 @@
 import { AntDesign, FontAwesome, Foundation } from '@expo/vector-icons'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState, useMemo, useCallback } from 'react'
 import { Alert, StyleSheet, Text, TextInput, View, useColorScheme } from 'react-native'
 import { createCreditAsync, getCreditsAsync, setTempCredit } from '../../src/redux/reducers/credits-reducer'
 import { AppButton } from '../../components/ui/AppButton'
@@ -28,23 +28,29 @@ const AddCredit: FC = () => {
     const { credits } = useAppSelector((state) => state.creditsPage)
     const [sumPay, setSumPay] = useState(0)
     const [sumCurrentBalance, setCurrentBalance] = useState(0)
-    useEffect(() => {
-        let sums = 0
-        let sumsBalance = 0
+    
+    // Оптимизация вычисления суммарного платежа и баланса
+    const { totalPayment, totalBalance } = useMemo(() => {
+        let sums = 0;
+        let sumsBalance = 0;
         credits.forEach((element) => {
             const sp =
                 element.sum *
                 (element.percents / 1200 +
-                    element.percents / 1200 / ((1 + element.percents / 1200) ** element.term - 1))
-            sums = sums + sp
+                    element.percents / 1200 / ((1 + element.percents / 1200) ** element.term - 1));
+            sums = sums + sp;
 
-            const currentCredit = currentInfoCredit(element).balanceLoanDebt as number
-            sumsBalance = sumsBalance + currentCredit
-        })
+            const currentCredit = currentInfoCredit(element).balanceLoanDebt as number;
+            sumsBalance = sumsBalance + currentCredit;
+        });
+        return { totalPayment: sums, totalBalance: sumsBalance };
+    }, [credits]);
 
-        setSumPay(sums)
-        setCurrentBalance(sumsBalance)
-    }, [credits])
+    // Используйте вычисленные значения
+    useEffect(() => {
+        setSumPay(totalPayment);
+        setCurrentBalance(totalBalance);
+    }, [totalPayment, totalBalance]);
 
     const [credit, setCredit] = useState(defaultCredit)
 
@@ -79,39 +85,75 @@ const AddCredit: FC = () => {
     const [percents, setPercents] = useState(defaultCredit.percents.toString())
 
     // Расчет платежа по кредиту
-    const calculate = (sum: number, term: number, percentages: number) => {
+    // const calculate = (sum: number, term: number, percentages: number) => {
+    //     if (percentages.toString().trim() && sum.toString().trim() && term.toString().trim()) {
+    //         const percentMonth = percentages / 1200
+    //         const newPayment = sum * (percentMonth + percentMonth / ((1 + percentMonth) ** term - 1))
+    //         let totalDebt = sum
+    //         let interests = sum * percentMonth
+    //         let debt = 0
+    //         let fullInterests = 0
+    //         let fullPayment = 0
+
+    //         for (let index = 1; index <= term; index++) {
+    //             interests = totalDebt * percentMonth
+    //             debt = newPayment - interests
+    //             totalDebt = totalDebt - debt
+    //             fullInterests = fullInterests + interests
+    //             fullPayment = fullPayment + interests + debt
+    //         }
+    //         setPayment(newPayment.toFixed(2))
+    //         setFullInterestsD(fullInterests.toFixed(2))
+    //         setFullPaymentD(fullPayment.toFixed(2))
+    //     } else {
+    //         Alert.alert('Введите обязательные поля!')
+    //     }
+    // }
+
+    // Оптимизация функции расчета платежа
+    const calculate = useCallback((sum: number, term: number, percentages: number) => {
         if (percentages.toString().trim() && sum.toString().trim() && term.toString().trim()) {
-            const percentMonth = percentages / 1200
-            const newPayment = sum * (percentMonth + percentMonth / ((1 + percentMonth) ** term - 1))
-            let totalDebt = sum
-            let interests = sum * percentMonth
-            let debt = 0
-            let fullInterests = 0
-            let fullPayment = 0
+            const percentMonth = percentages / 1200;
+            const newPayment = sum * (percentMonth + percentMonth / ((1 + percentMonth) ** term - 1));
+            let totalDebt = sum;
+            let interests = sum * percentMonth;
+            let debt = 0;
+            let fullInterests = 0;
+            let fullPayment = 0;
 
             for (let index = 1; index <= term; index++) {
-                interests = totalDebt * percentMonth
-                debt = newPayment - interests
-                totalDebt = totalDebt - debt
-                fullInterests = fullInterests + interests
-                fullPayment = fullPayment + interests + debt
+                interests = totalDebt * percentMonth;
+                debt = newPayment - interests;
+                totalDebt = totalDebt - debt;
+                fullInterests = fullInterests + interests;
+                fullPayment = fullPayment + interests + debt;
             }
-            setPayment(newPayment.toFixed(2))
-            setFullInterestsD(fullInterests.toFixed(2))
-            setFullPaymentD(fullPayment.toFixed(2))
+            setPayment(newPayment.toFixed(2));
+            setFullInterestsD(fullInterests.toFixed(2));
+            setFullPaymentD(fullPayment.toFixed(2));
         } else {
-            Alert.alert('Введите обязательные поля!')
+            Alert.alert('Введите обязательные поля!');
         }
-    }
+    }, []);
 
-    const saveHandler = () => {
+    // const saveHandler = () => {
+    //     if (credit.date && credit.dayOfPay && credit.sum && credit.term && credit.percents) {
+    //         dispatch(createCreditAsync(credit))
+    //         setCredit(defaultCredit)
+    //     } else {
+    //         Alert.alert('Введите обязательные поля!')
+    //     }
+    // }
+
+    // Оптимизация обработчиков событий
+    const saveHandler = useCallback(() => {
         if (credit.date && credit.dayOfPay && credit.sum && credit.term && credit.percents) {
-            dispatch(createCreditAsync(credit))
-            setCredit(defaultCredit)
+            dispatch(createCreditAsync(credit));
+            setCredit(defaultCredit);
         } else {
-            Alert.alert('Введите обязательные поля!')
+            Alert.alert('Введите обязательные поля!');
         }
-    }
+    }, [credit, defaultCredit, dispatch]);
 
     const setDefaultCredit = () => {
         setCredit(defaultCredit)
@@ -275,12 +317,12 @@ const AddCredit: FC = () => {
                     text: 'OK',
                     onPress: async () => {
                         await creditsAPI.deleteCredits()
-                        //    .then(() => console.log('Все кредиты успешно удалены! {index.tsx, deleteAllCredits}')                           )
+                            .then(() => console.log('Все кредиты успешно удалены! {index.tsx, deleteAllCredits}')                           )
                         // Если БД не существует, то создаем её
                         await creditsAPI.init()
-                           //.then(() => {console.log('Database loaded! {index.tsx, deleteAllCredits}')
+                           .then(() => {console.log('Database loaded! {index.tsx, deleteAllCredits}')
                             /* setIsLoadDB(true) */
-                        //})
+                        })
                         dispatch(getCreditsAsync())
                     },
                     style: 'destructive',
@@ -379,18 +421,18 @@ const AddCredit: FC = () => {
                     </View>
                 </View>
                 <View style={styles.textBlock}>
-                    <Text style={{ ...styles.text, ...themeTextStyle }}>Ежемесячный платеж: </Text>
-                    <Text style={{ ...styles.text, ...themeTextStyle }}>{payment + ' \u20BD'}</Text>
+                    <Text style={{ ...styles.info, ...themeTextStyle }}>Ежемесячный платеж: </Text>
+                    <Text style={{ ...styles.info, ...themeTextStyle }}>{payment + ' \u20BD'}</Text>
                 </View>
                 <View style={styles.textBlock}>
-                    <Text style={{ ...styles.text, ...themeTextStyle }}>Переплата: </Text>
-                    <Text style={{ ...styles.text, ...themeTextStyle }}>
+                    <Text style={{ ...styles.info, ...themeTextStyle }}>Переплата: </Text>
+                    <Text style={{ ...styles.info, ...themeTextStyle }}>
                         {fullInterestsD + ' \u20BD'}
                     </Text>
                 </View>
                 <View style={styles.textBlock}>
-                    <Text style={{ ...styles.text, ...themeTextStyle }}>Общая сумма: </Text>
-                    <Text style={{ ...styles.text, ...themeTextStyle }}>{fullPaymentD + ' \u20BD'}</Text>
+                    <Text style={{ ...styles.info, ...themeTextStyle }}>Общая сумма: </Text>
+                    <Text style={{ ...styles.info, ...themeTextStyle }}>{fullPaymentD + ' \u20BD'}</Text>
                 </View>
                 <View style={styles.buttons}>
                     <View style={{ ...styles.button_two, marginRight: 'auto' }}>
@@ -403,17 +445,17 @@ const AddCredit: FC = () => {
                     </View>
                 </View>
                 <View style={styles.textBlock}>
-                    <AppText style={{ ...styles.text, ...themeTextStyle }}>
+                    <AppText style={{ ...styles.info, ...themeTextStyle }}>
                         Количество выданных кредитов: {credits.length}
                     </AppText>
                 </View>
                 <View style={styles.textBlock}>
-                    <AppText style={{ ...styles.text, ...themeTextStyle }}>
+                    <AppText style={{ ...styles.info, ...themeTextStyle }}>
                         Суммарный платеж: {sumPay.toFixed(2) + ' \u20BD'}
                     </AppText>
                 </View>
                 <View style={styles.textBlock}>
-                    <AppText style={{ ...styles.text, ...themeTextStyle }}>
+                    <AppText style={{ ...styles.info, ...themeTextStyle }}>
                         Суммарный основной долг: {sumCurrentBalance.toFixed(2) + ' \u20BD'}
                     </AppText>
                 </View>
@@ -446,7 +488,7 @@ const styles = StyleSheet.create({
         color: 'gray',
     },
     input: {
-        padding: 10,
+        paddingLeft: 10,
         width: '100%',
         fontSize: 20,
         fontFamily: 'roboto-bold',
@@ -473,10 +515,13 @@ const styles = StyleSheet.create({
         width: '90%',
     },
     text: {
-        fontSize: SIZES.medium,
+        fontSize: SIZES.large,
     },
     comment: {
         fontSize: SIZES.small,
+    },
+    info: {
+        fontSize: SIZES.medium,
     },
     textBlock: {
         flexDirection: 'row',

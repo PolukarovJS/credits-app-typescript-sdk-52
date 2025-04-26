@@ -459,7 +459,6 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     input: {
-        padding: 10,
         width: '80%',
         fontSize: 20,
         fontFamily: 'roboto-bold',
