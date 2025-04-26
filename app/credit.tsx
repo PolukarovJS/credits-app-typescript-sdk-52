@@ -38,6 +38,7 @@ import Padding from '../components/ui/Padding'
 import { AppText } from '../components/ui/AppText'
 import { AddHolidayModal } from '../components/credit/AddHolidayModal'
 import { COLORS, SIZES } from '../constants'
+import { useCalculateAnnuity } from '../src/hooks/useCalculateAnnuity'
 
 const Credit = () => {
     const router = useRouter()
@@ -50,33 +51,11 @@ const Credit = () => {
     const [modalHVisible, setModalHVisible] = useState(false)
 
     let credit = credits.find((credit: CreditType) => credit.id === selectedCredit) as CreditType
-
-    let defaultPayment = 10000
-
-    if (credit) {
-        defaultPayment =
-            credit.sum *
-            (credit.percents / 1200 +
-                credit.percents / 1200 / ((1 + credit.percents / 1200) ** credit.term - 1))
-        let totalDebt = credit.sum
-        let interests = (credit.sum * credit.percents) / 1200
-        let debt = 0
-        let defaultFullInterests = 0
-        let defaultFullPayment = 0
-
-        for (let index = 1; index <= credit.term; index++) {
-            interests = (totalDebt * credit.percents) / 1200
-            debt = defaultPayment - interests
-            totalDebt = totalDebt - debt
-            defaultFullInterests = defaultFullInterests + interests
-            defaultFullPayment = defaultFullPayment + interests + debt
-        }
-    }
-
-    const [payment, setPayment] = useState(defaultPayment)
-    const [fullInterests, setFullInterests] = useState(0)
+    const {calculatedPayment, calculatedFullInterests, calculatedFullPayment} = useCalculateAnnuity(credit.sum, credit.term, credit.percents)
+    const [payment, setPayment] = useState(calculatedPayment)
+    const [fullInterests, setFullInterests] = useState(calculatedFullInterests)
     const [fullInterestsAfterPay, setFullInterestsAfterPay] = useState(0)
-    const [fullPayment, setFullPayment] = useState(0)
+    const [fullPayment, setFullPayment] = useState(calculatedFullPayment)
     const [fullPaymentAfterPay, setFullPaymentAfterPay] = useState(0)
     const [rowsShow, setRowsShow] = useState<RowType[]>([])
 
@@ -160,29 +139,36 @@ const Credit = () => {
         setIsReady(true)
     }
 
+    // Выносим useMemo на верхний уровень компонента
+    const rowsDefault = useMemo(() => {
+        if (!credit) return [];
+        return calculateWithEarlyPaymentsRows(credit);
+    }, [credit]);
+
+    const rowsRowType = useMemo(() => {
+        let z = 0;
+        let u = 0;
+        const rows = rowsDefault.map((row) => {
+            const rowType = convertICreditRowToRowType(row);
+            z += row.interests;
+            u += row.payment;
+            return rowType;
+        });
+        return { rows, fullInterestsAfterPay: z, fullPaymentAfterPay: u };
+    }, [rowsDefault]);
+
     // useEffect(() => {
     //     LogBox.ignoreLogs(['VirtualizedLists should never be nested'])
-    // }, [])
+    // }, []);
 
     useEffect(() => {
-        // console.log('useEffect с зависимостью credit')
         if (credit) {
-            calculator(credit)
-            let rowsDefault = calculateWithEarlyPaymentsRows(credit)
-            // console.log(rowsDefault)
-            let rowsRowType: Array<RowType> = []
-            let z = 0
-            let u = 0
-            for (let i = 0; i < rowsDefault.length; i++) {
-                rowsRowType.push(convertICreditRowToRowType(rowsDefault[i]))
-                z = z + rowsDefault[i].interests
-                u = u + rowsDefault[i].payment
-            }
-            setFullInterestsAfterPay(z)
-            setFullPaymentAfterPay(u)
-            setRowsShow(rowsRowType)
+            calculator(credit);
+            setRowsShow(rowsRowType.rows);
+            setFullInterestsAfterPay(rowsRowType.fullInterestsAfterPay);
+            setFullPaymentAfterPay(rowsRowType.fullPaymentAfterPay);
         }
-    }, [credit])
+    }, [credit, rowsRowType])
 
     const colorScheme = useColorScheme()
 

@@ -8,6 +8,7 @@ import { AppTextBold } from '../components/ui/AppTextBold'
 import { CreditType, HolidayType, RepaymentType } from './../src/types'
 import { useAppDispatch } from './../src/hooks/hook'
 import { COLORS, SIZES } from '../constants'
+import { calculateAnnuity } from '@/src/utils/calculator'
 
 const AddCredit: FC = () => {
     console.log('Selected AddCreditScreen')
@@ -25,30 +26,10 @@ const AddCredit: FC = () => {
     }
 
     const [credit, setCredit] = useState(defaultCredit)
-
-    const defaultPayment =
-        defaultCredit.sum *
-        (defaultCredit.percents / 1200 +
-            defaultCredit.percents /
-                1200 /
-                ((1 + defaultCredit.percents / 1200) ** defaultCredit.term - 1))
-
-    let totalDebt = defaultCredit.sum
-    let interests = (defaultCredit.sum * defaultCredit.percents) / 1200
-    let debt = 0
-    let defaultFullInterests = 0
-    let defaultFullPayment = 0
-
-    for (let index = 1; index <= defaultCredit.term; index++) {
-        interests = (totalDebt * defaultCredit.percents) / 1200
-        debt = defaultPayment - interests
-        totalDebt = totalDebt - debt
-        defaultFullInterests = defaultFullInterests + interests
-        defaultFullPayment = defaultFullPayment + interests + debt
-    }
-    const [payment, setPayment] = useState(defaultPayment.toFixed(2))
-    const [fullInterestsD, setFullInterestsD] = useState(defaultFullInterests.toFixed(2))
-    const [fullPaymentD, setFullPaymentD] = useState(defaultFullPayment.toFixed(2))
+    const {calculatedPayment, calculatedFullPayment, calculatedFullInterests} = calculateAnnuity(defaultCredit.sum, defaultCredit.term, defaultCredit.percents)
+    const [payment, setPayment] = useState(calculatedPayment.toFixed(2))
+    const [fullInterestsD, setFullInterestsD] = useState(calculatedFullInterests.toFixed(2))
+    const [fullPaymentD, setFullPaymentD] = useState(calculatedFullPayment.toFixed(2))
 
     const [day, setDay] = useState(defaultCredit.dayOfPay.toString())
     const [sum, setSum] = useState(defaultCredit.sum.toString())
@@ -99,9 +80,9 @@ const AddCredit: FC = () => {
         setDate(defaultCredit.date)
         setTerm(defaultCredit.term.toString())
         setPercents(defaultCredit.percents.toString())
-        setPayment(defaultPayment.toFixed(2))
-        setFullInterestsD(defaultFullInterests.toFixed(2))
-        setFullPaymentD(defaultFullPayment.toFixed(2))
+        setPayment(calculatedPayment.toFixed(2))
+        setFullInterestsD(calculatedFullInterests.toFixed(2))
+        setFullPaymentD(calculatedFullPayment.toFixed(2))
     }
 
     const onChangeDayPay = (dayPay: string) => {

@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../src/hooks/hook'
 import { COLORS, SIZES } from '../../constants'
 import { creditsAPI } from '../../src/api/credits-api'
 import { AppText } from '../../components/ui/AppText'
-import { currentInfoCredit } from '../../src/utils/calculator'
+import { calculateAnnuity, currentInfoCredit } from '../../src/utils/calculator'
 
 const AddCredit: FC = () => {
     console.log('Selected index.tsx')
@@ -53,30 +53,12 @@ const AddCredit: FC = () => {
     }, [totalPayment, totalBalance]);
 
     const [credit, setCredit] = useState(defaultCredit)
-
-    const defaultPayment =
-        defaultCredit.sum *
-        (defaultCredit.percents / 1200 +
-            defaultCredit.percents /
-                1200 /
-                ((1 + defaultCredit.percents / 1200) ** defaultCredit.term - 1))
-
-    let totalDebt = defaultCredit.sum
-    let interests = (defaultCredit.sum * defaultCredit.percents) / 1200
-    let debt = 0
-    let defaultFullInterests = 0
-    let defaultFullPayment = 0
-
-    for (let index = 1; index <= defaultCredit.term; index++) {
-        interests = (totalDebt * defaultCredit.percents) / 1200
-        debt = defaultPayment - interests
-        totalDebt = totalDebt - debt
-        defaultFullInterests = defaultFullInterests + interests
-        defaultFullPayment = defaultFullPayment + interests + debt
-    }
-    const [payment, setPayment] = useState(defaultPayment.toFixed(2))
-    const [fullInterestsD, setFullInterestsD] = useState(defaultFullInterests.toFixed(2))
-    const [fullPaymentD, setFullPaymentD] = useState(defaultFullPayment.toFixed(2))
+    
+    const {calculatedPayment, calculatedFullInterests, calculatedFullPayment } = calculateAnnuity(defaultCredit.sum, defaultCredit.term, defaultCredit.percents)
+    
+    const [payment, setPayment] = useState(calculatedPayment.toFixed(2))
+    const [fullInterestsD, setFullInterestsD] = useState(calculatedFullInterests.toFixed(2))
+    const [fullPaymentD, setFullPaymentD] = useState(calculatedFullPayment.toFixed(2))
 
     const [day, setDay] = useState(defaultCredit.dayOfPay.toString())
     const [sum, setSum] = useState(defaultCredit.sum.toString())
@@ -113,24 +95,10 @@ const AddCredit: FC = () => {
     // Оптимизация функции расчета платежа
     const calculate = useCallback((sum: number, term: number, percentages: number) => {
         if (percentages.toString().trim() && sum.toString().trim() && term.toString().trim()) {
-            const percentMonth = percentages / 1200;
-            const newPayment = sum * (percentMonth + percentMonth / ((1 + percentMonth) ** term - 1));
-            let totalDebt = sum;
-            let interests = sum * percentMonth;
-            let debt = 0;
-            let fullInterests = 0;
-            let fullPayment = 0;
-
-            for (let index = 1; index <= term; index++) {
-                interests = totalDebt * percentMonth;
-                debt = newPayment - interests;
-                totalDebt = totalDebt - debt;
-                fullInterests = fullInterests + interests;
-                fullPayment = fullPayment + interests + debt;
-            }
-            setPayment(newPayment.toFixed(2));
-            setFullInterestsD(fullInterests.toFixed(2));
-            setFullPaymentD(fullPayment.toFixed(2));
+            const {calculatedPayment, calculatedFullInterests, calculatedFullPayment } = calculateAnnuity(sum, term, percentages)
+            setPayment(calculatedPayment.toFixed(2));
+            setFullInterestsD(calculatedFullInterests.toFixed(2));
+            setFullPaymentD(calculatedFullPayment.toFixed(2));
         } else {
             Alert.alert('Введите обязательные поля!');
         }
@@ -162,9 +130,9 @@ const AddCredit: FC = () => {
         setDate(defaultCredit.date)
         setTerm(defaultCredit.term.toString())
         setPercents(defaultCredit.percents.toString())
-        setPayment(defaultPayment.toFixed(2))
-        setFullInterestsD(defaultFullInterests.toFixed(2))
-        setFullPaymentD(defaultFullPayment.toFixed(2))
+        setPayment(calculatedPayment.toFixed(2))
+        setFullInterestsD(calculatedFullInterests.toFixed(2))
+        setFullPaymentD(calculatedFullPayment.toFixed(2))
     }
 
     const onChangeDate = (currentDate: Date) => {

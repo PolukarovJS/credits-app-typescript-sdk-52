@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar'
 import { Platform, ScrollView, StyleSheet, LogBox, useColorScheme } from 'react-native'
 
 import { Text, View } from '../components/Themed'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { calculateWithEarlyPaymentsRows } from './../src/utils/calculator'
 import { CreditType, RowType, convertICreditRowToRowType } from './../src/types'
 
@@ -14,39 +14,18 @@ import { AppButton } from '../components/ui/AppButton'
 import Padding from '../components/ui/Padding'
 import { AppText } from '../components/ui/AppText'
 import { COLORS, SIZES } from '../constants'
+import { useCalculateAnnuity } from '../src/hooks/useCalculateAnnuity'
 
 const Credit = () => {
     const { isLoading, tempCredit } = useAppSelector((state) => state.creditsPage)
     const [isReady, setIsReady] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
 
-    let defaultPayment = 10000
+    const {calculatedPayment, calculatedFullInterests, calculatedFullPayment} = useCalculateAnnuity(tempCredit.sum, tempCredit.term, tempCredit.percents)
 
-    if (tempCredit) {
-        defaultPayment =
-            tempCredit.sum *
-            (tempCredit.percents / 1200 +
-                tempCredit.percents /
-                    1200 /
-                    ((1 + tempCredit.percents / 1200) ** tempCredit.term - 1))
-        let totalDebt = tempCredit.sum
-        let interests = (tempCredit.sum * tempCredit.percents) / 1200
-        let debt = 0
-        let defaultFullInterests = 0
-        let defaultFullPayment = 0
-
-        for (let index = 1; index <= tempCredit.term; index++) {
-            interests = (totalDebt * tempCredit.percents) / 1200
-            debt = defaultPayment - interests
-            totalDebt = totalDebt - debt
-            defaultFullInterests = defaultFullInterests + interests
-            defaultFullPayment = defaultFullPayment + interests + debt
-        }
-    }
-
-    const [payment, setPayment] = useState(defaultPayment)
-    const [fullInterests, setFullInterests] = useState(0)
-    const [fullPayment, setFullPayment] = useState(0)
+    const [payment, setPayment] = useState(calculatedPayment)
+    const [fullInterests, setFullInterests] = useState(calculatedFullInterests)
+    const [fullPayment, setFullPayment] = useState(calculatedFullPayment)
     const [rowsShow, setRowsShow] = useState<RowType[]>([])
 
     const calculator = (credit: CreditType) => {
@@ -54,29 +33,37 @@ const Credit = () => {
         setFullInterests(0)
         setFullPayment(0)
         setPayment(0)
-
-        const percentMonth = credit.percents / 1200
-        setPayment(
-            credit.sum *
-                (percentMonth + percentMonth / ((1 + percentMonth) ** credit.term - 1))
-        )
-        let totalDebt = credit.sum
-        let interests = credit.sum * percentMonth
-        let debt = 0
-        let v = 0
-        let y = 0
-        for (let index = 1; index <= credit.term; index++) {
-            interests = totalDebt * percentMonth
-            debt = payment - interests
-            totalDebt = totalDebt - debt
-            v = v + interests
-            y = y + interests + debt
-        }
-
-        setFullInterests(v)
-        setFullPayment(y)
+        const {calculatedPayment, calculatedFullInterests, calculatedFullPayment} = useCalculateAnnuity(credit.sum, credit.term, credit.percents)
+        setPayment(calculatedPayment)
+        setFullInterests(calculatedFullInterests)
+        setFullPayment(calculatedFullPayment)
         setIsReady(true)
     }
+
+    // Выносим useMemo на верхний уровень компонента
+    const rowsDefault = useMemo(() => {
+        if (!tempCredit) return [];
+        return calculateWithEarlyPaymentsRows({
+            date: tempCredit.date,
+            dayOfPay: tempCredit.dayOfPay,
+            id: tempCredit.id,
+            percents: tempCredit.percents,
+            sum: tempCredit.sum,
+            term: tempCredit.term,
+        } as CreditType);
+    }, [tempCredit]);
+
+    const rowsRowType = useMemo(() => {
+        let z = 0;
+        let u = 0;
+        const rows = rowsDefault.map((row) => {
+            const rowType = convertICreditRowToRowType(row);
+            z += row.interests;
+            u += row.payment;
+            return rowType;
+        });
+        return { rows, fullInterests: z, fullPayment: u };
+    }, [rowsDefault]);
 
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested'])
@@ -85,22 +72,12 @@ const Credit = () => {
     useEffect(() => {
         console.log('useEffect с зависимостью tempCredit')
         if (tempCredit) {
-            calculator(tempCredit)
-            let rowsDefault = calculateWithEarlyPaymentsRows({
-                date: tempCredit.date,
-                dayOfPay: tempCredit.dayOfPay,
-                id: tempCredit.id,
-                percents: tempCredit.percents,
-                sum: tempCredit.sum,
-                term: tempCredit.term,
-            } as CreditType)
-            let rowsRowType: Array<RowType> = []
-            for (let i = 0; i < rowsDefault.length; i++) {
-                rowsRowType.push(convertICreditRowToRowType(rowsDefault[i]))
-            }
-            setRowsShow(rowsRowType)
+            calculator(tempCredit);
+            setRowsShow(rowsRowType.rows);
+            setFullInterests(rowsRowType.fullInterests);
+            setFullPayment(rowsRowType.fullPayment);
         }
-    }, [tempCredit])
+    }, [tempCredit, rowsRowType])
 
     const colorScheme = useColorScheme()
 
