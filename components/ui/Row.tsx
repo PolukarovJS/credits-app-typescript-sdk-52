@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { COLORS } from '../../constants/theme'
-import { RowType } from '../../app/types'
+import { RowType } from '../../src/types'
 import { AppText } from './AppText'
 
 export const Row: FC<{ row: RowType }> = ({ row }) => {

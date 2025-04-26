@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Alert } from 'react-native'
 import { creditsAPI } from '../../api/credits-api'
-import { HolidayType, CreditType, RepaymentType, TypeRepayment } from '../../../app/types'
+import { HolidayType, CreditType, RepaymentType, TypeRepayment } from '../../../src/types'
 import { AppThunk } from '../redux-store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 

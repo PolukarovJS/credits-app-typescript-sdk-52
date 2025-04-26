@@ -4,7 +4,7 @@ import { Foundation } from '@expo/vector-icons'
 import ComboBox from 'react-native-combobox'
 import { AppButton } from '../ui/AppButton'
 import { AppDateInput } from '../ui/AppDateInput'
-import { TypeRepayment } from '../../app/types'
+import { TypeRepayment } from '../../src/types'
 import { COLORS, SIZES } from '../../constants'
 
 type PropsType = {

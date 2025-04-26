@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { FlatList, Modal, StyleSheet, View, useColorScheme } from 'react-native'
-import { RowType } from '../../app/types'
+import { RowType } from '../../src/types'
 import { AppButton } from '../ui/AppButton'
 import { AppText } from '../ui/AppText'
 import { Row } from '../ui/Row'

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { THEME } from '../../constants/theme'
-import { CreditType } from '../../app/types'
+import { CreditType } from '../../src/types'
 import { AppText } from './AppText'
 
 type PropsType = {

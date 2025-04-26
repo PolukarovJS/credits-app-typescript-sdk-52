@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Alert, StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
-import { HolidayType, RepaymentType } from '../../app/types'
-import { transformDate } from '../../app/utils/transformDate'
+import { HolidayType, RepaymentType } from '../../src/types'
+import { transformDate } from '../../src/utils/transformDate'
 import { AppText } from '../ui/AppText'
 import { COLORS } from '../../constants'
 

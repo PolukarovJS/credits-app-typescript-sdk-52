@@ -9,7 +9,7 @@ import {
     View,
     useColorScheme,
 } from 'react-native'
-import { CreditType } from '../../app/types'
+import { CreditType } from '../../src/types'
 import { AppButton } from '../ui/AppButton'
 import { AppDateInput } from '../ui/AppDateInput'
 import { COLORS, SIZES } from '../../constants'

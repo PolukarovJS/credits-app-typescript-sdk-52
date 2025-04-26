@@ -8,20 +8,20 @@ export function useDataBase(): [boolean, Error | null, () => void] {
     useEffect(() => {
         async function prepare() {
             // Если БД не существует, то создаем её
-            await creditsAPI
+            creditsAPI
                 .init()
-                .then(() => {
-                    console.log('Database loaded!')
-                    setIsLoadDB(true)
-                })
-                .catch(setErrorDB)
+                //.then(() => {
+                //    console.log('Database loaded!')
+                //    setIsLoadDB(true)
+                //})
+                //.catch(setErrorDB)
             // await new Promise((resolve) => setTimeout(resolve, 5000))
         }
         prepare()
     }, [])
     const deleteBD = async () => {
         // Для удаления БД
-        await creditsAPI.deleteCredits()
+        creditsAPI.deleteCredits()
     }
     return [isLoadDB, errorDB, deleteBD]
 }

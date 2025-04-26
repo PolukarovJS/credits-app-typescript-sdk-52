@@ -274,11 +274,11 @@ const AddCredit: FC = () => {
                 {
                     text: 'OK',
                     onPress: async () => {
-                        await creditsAPI
+                        creditsAPI
                             .deleteCredits()
                         //    .then(() => console.log('Все кредиты успешно удалены! {index.tsx, deleteAllCredits}')                           )
                         // Если БД не существует, то создаем её
-                        await creditsAPI.init()
+                        creditsAPI.init()
                            //.then(() => {console.log('Database loaded! {index.tsx, deleteAllCredits}')
                             /* setIsLoadDB(true) */
                         //})

@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 import { BottomSheet, Button, ListItem } from 'react-native-elements'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { StyleSheet } from 'react-native'
-import { CreditType } from '../../app/types'
+import { CreditType } from '../../src/types'
 
 type BottomSheetComponentProps = {
     credits: CreditType[]

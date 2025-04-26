@@ -95,10 +95,10 @@ const AddCredit: FC = () => {
         }
         creditsAPI
             .createDatabase(dbName)
-            .then(() => Alert.alert(`Успех', 'База данных ${dbName}.db успешно создана`))
-            .catch((error) =>
-                Alert.alert('Ошибка', `Не удалось создать базу данных ${dbName}.db: ` + error)
-            )
+            //.then(() => Alert.alert(`Успех', 'База данных ${dbName}.db успешно создана`))
+            //.catch((error) =>
+            //    Alert.alert('Ошибка', `Не удалось создать базу данных ${dbName}.db: ` + error)
+            //)
     }
 
     useEffect(() => {
