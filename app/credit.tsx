@@ -4,7 +4,6 @@ import {
     Dimensions,
     FlatList,
     Platform,
-    ScrollView,
     StyleSheet,
     LogBox,
     useColorScheme,
@@ -161,9 +160,9 @@ const Credit = () => {
         setIsReady(true)
     }
 
-    useEffect(() => {
-        LogBox.ignoreLogs(['VirtualizedLists should never be nested'])
-    }, [])
+    // useEffect(() => {
+    //     LogBox.ignoreLogs(['VirtualizedLists should never be nested'])
+    // }, [])
 
     useEffect(() => {
         // console.log('useEffect с зависимостью credit')
@@ -215,185 +214,184 @@ const Credit = () => {
                         onSave={addHolidayHandler}
                         onCancel={onCancelHandlerH}
                     />
-                    <ScrollView>
-                        <>
-                            <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
-                                {'Сумма кредита'}
-                            </AppText>
-                            <AppText style={{ ...styles.title, ...themeTextStyle }}>
-                                {credit.sum + ' \u20BD'}
-                            </AppText>
-                            <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
-                                {'Процентная ставка по кредиту'}
-                            </AppText>
-                            <AppText style={{ ...styles.title, ...themeTextStyle }}>
-                                {credit.percents + '%'}
-                            </AppText>
-                            <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
-                                {'Срок кредита'}
-                            </AppText>
-                            <AppText style={{ ...styles.title, ...themeTextStyle }}>
-                                {credit.term + ' месяцев'}
-                            </AppText>
-                            <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
-                                {'Дата выдачи'}
-                            </AppText>
-                            <AppText style={{ ...styles.title, ...themeTextStyle }}>
-                                {transformDate(credit.date)}
-                            </AppText>
-                            <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
-                                {'Ежемесячный платеж'}
-                            </AppText>
-                            <AppText style={{ ...styles.title, ...themeTextStyle }}>
-                                {payment.toFixed(2) + ' \u20BD'}
-                            </AppText>
-                            <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
-                                {'Переплата (с учетом досрочных платежей)'}
-                            </AppText>
-                            {/* <AppText style={{ ...styles.title, ...themeTextStyle }}>
-                                {fullInterests.toFixed(2) +
-                                    ' \u20BD' +
-                                    `(${fullInterestsAfterPay.toFixed(2)}  \u20BD)`}
-                            </AppText> */}
-                            <AppText style={{ ...styles.title, ...themeTextStyle }}>
-                                {credit.repayments || credit.holidays
-                                    ? fullInterests.toFixed(2) +
-                                      ' \u20BD' +
-                                      ` (${fullInterestsAfterPay.toFixed(2)}  \u20BD)`
-                                    : fullInterests.toFixed(2) +
-                                      ` \u20BD (${fullInterests.toFixed(2) + '\u20BD'})`}
-                            </AppText>
-                            <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
-                                {'Общая сумма выплат (с учетом досрочных платежей) '}
-                            </AppText>
-                            <AppText style={{ ...styles.title, ...themeTextStyle }}>
-                                {fullPayment.toFixed(2) +
-                                    ` \u20BD (${fullPaymentAfterPay.toFixed(2)}  \u20BD)`}
-                            </AppText>
-                        </>
+                    
+                    <FlatList
+                        data={credit.repayments && credit.repayments.length > 0 ? credit.repayments : []}
+                        renderItem={({ item }) => (
+                            <Repayment remove={deleteRepaymentHandler} repayment={item} />
+                        )}
+                        keyExtractor={(item) => item.id.toString()}
+                        ListEmptyComponent={<View />} // Пустой компонент для пустого списка
+                        ListHeaderComponent={() => (
+                            <>
+                                <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
+                                    {'Сумма кредита'}
+                                </AppText>
+                                <AppText style={{ ...styles.title, ...themeTextStyle }}>
+                                    {credit.sum + ' \u20BD'}
+                                </AppText>
+                                <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
+                                    {'Процентная ставка по кредиту'}
+                                </AppText>
+                                <AppText style={{ ...styles.title, ...themeTextStyle }}>
+                                    {credit.percents + '%'}
+                                </AppText>
+                                <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
+                                    {'Срок кредита'}
+                                </AppText>
+                                <AppText style={{ ...styles.title, ...themeTextStyle }}>
+                                    {credit.term + ' месяцев'}
+                                </AppText>
+                                <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
+                                    {'Дата выдачи'}
+                                </AppText>
+                                <AppText style={{ ...styles.title, ...themeTextStyle }}>
+                                    {transformDate(credit.date)}
+                                </AppText>
+                                <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
+                                    {'Ежемесячный платеж'}
+                                </AppText>
+                                <AppText style={{ ...styles.title, ...themeTextStyle }}>
+                                    {payment.toFixed(2) + ' \u20BD'}
+                                </AppText>
+                                <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
+                                    {'Переплата (с учетом досрочных платежей)'}
+                                </AppText>
+                                <AppText style={{ ...styles.title, ...themeTextStyle }}>
+                                    {credit.repayments || credit.holidays
+                                        ? fullInterests.toFixed(2) +
+                                          ' \u20BD' +
+                                          ` (${fullInterestsAfterPay.toFixed(2)}  \u20BD)`
+                                        : fullInterests.toFixed(2) +
+                                          ` \u20BD (${fullInterests.toFixed(2) + '\u20BD'})`}
+                                </AppText>
+                                <AppText style={{ ...styles.headerTitle, ...themeTextStyle }}>
+                                    {'Общая сумма выплат (с учетом досрочных платежей) '}
+                                </AppText>
+                                <AppText style={{ ...styles.title, ...themeTextStyle }}>
+                                    {fullPayment.toFixed(2) +
+                                        ` \u20BD (${fullPaymentAfterPay.toFixed(2)}  \u20BD)`}
+                                </AppText>
+                                
+                                {credit.repayments && credit.repayments.length > 0 && (
+                                    <AppTextBold
+                                        style={{
+                                            textAlign: 'center',
+                                            fontSize: 16,
+                                            marginTop: 10,
+                                            ...themeTextStyle,
+                                        }}
+                                    >
+                                        Досрочные платежи
+                                    </AppTextBold>
+                                )}
+                            </>
+                        )}
+                        ListFooterComponent={() => (
+                            <>
+                                {credit.repayments && credit.repayments.length > 0 && (
+                                    <View
+                                        style={{
+                                            width: 'auto',
+                                        }}
+                                    >
+                                        <AppButton
+                                            onPress={deleteAllRepaymentsHandler}
+                                            color={COLORS.MAIN_COLOR}
+                                        >
+                                            <Text style={{ color: COLORS.MAIN_COLOR }}>
+                                                Удалить все досрочные платежи
+                                            </Text>
+                                        </AppButton>
+                                    </View>
+                                )}
 
-                        {credit.repayments && (
-                            <View>
-                                <AppTextBold
-                                    style={{
-                                        textAlign: 'center',
-                                        fontSize: 16,
-                                        marginTop: 10,
-                                        ...themeTextStyle,
-                                    }}
-                                >
-                                    Досрочные платежи
-                                </AppTextBold>
-                                <FlatList
-                                    style={{ marginBottom: 0, marginTop: 10 }}
-                                    data={credit.repayments}
-                                    renderItem={({ item }) => (
-                                        <Repayment remove={deleteRepaymentHandler} repayment={item} />
-                                    )}
-                                    keyExtractor={(item) => item.id.toString()}
-                                />
+                                {credit.holidays && credit.holidays.length > 0 && (
+                                    <>
+                                        <AppTextBold
+                                            style={{
+                                                textAlign: 'center',
+                                                fontSize: 16,
+                                                marginTop: 10,
+                                                ...themeTextStyle,
+                                            }}
+                                        >
+                                            Кредитные каникулы
+                                        </AppTextBold>
+                                        
+                                        {credit.holidays.map(item => (
+                                            <Holiday 
+                                                key={item.id.toString()}
+                                                remove={deleteHolidayHandler} 
+                                                holiday={item} 
+                                            />
+                                        ))}
+                                    </>
+                                )}
+
+                                <View style={styles.buttons}>
+                                    <View style={styles.button}>
+                                        <AppButton onPress={() => setModalVisible(true)}>
+                                            <Text>Изменить</Text>
+                                        </AppButton>
+                                    </View>
+                                    <View style={styles.button}>
+                                        <AppButton
+                                            onPress={() => setModalRVisible(true)}
+                                            color={COLORS.MAIN_COLOR}
+                                        >
+                                            <Text>Внести платеж</Text>
+                                        </AppButton>
+                                    </View>
+                                    <View style={styles.button}>
+                                        <AppButton onPress={() => setModalSVisible(true)}>
+                                            <Text>График</Text>
+                                        </AppButton>
+                                    </View>
+                                </View>
+
                                 <View
                                     style={{
-                                        // width: '100%',
-                                        width: 'auto',
-                                        // alignItems: 'center',
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
                                     }}
                                 >
-                                    <AppButton
-                                        onPress={deleteAllRepaymentsHandler}
-                                        color={COLORS.MAIN_COLOR}
+                                    <View
+                                        style={{
+                                            width: '99%',
+                                        }}
                                     >
-                                        <Text style={{ color: COLORS.MAIN_COLOR }}>
-                                            Удалить все досрочные платежи
-                                        </Text>
-                                    </AppButton>
+                                        <AppButton
+                                            onPress={() => setModalHVisible(true)}
+                                            color={COLORS.DANGER_COLOR}
+                                        >
+                                            <Text>Пропустить платеж</Text>
+                                        </AppButton>
+                                    </View>
                                 </View>
-                            </View>
+
+                                <View style={styles.buttons}>
+                                    <View style={styles.button}>
+                                        <AppButton
+                                            onPress={() => {
+                                                dispatch(getCreditsAsync())
+                                                router.back()
+                                            }}
+                                            color={COLORS.MAIN_BLUE_5}
+                                        >
+                                            <Text>Назад</Text>
+                                        </AppButton>
+                                    </View>
+                                    <View style={styles.button}>
+                                        <AppButton onPress={deleteCreditHandler} color={COLORS.MAIN_BLUE_5}>
+                                            <Text>Удалить кредит</Text>
+                                        </AppButton>
+                                    </View>
+                                </View>
+                            </>
                         )}
-
-                        {credit.holidays && (
-                            <View>
-                                <AppTextBold
-                                    style={{
-                                        textAlign: 'center',
-                                        fontSize: 16,
-                                        marginTop: 10,
-                                        ...themeTextStyle,
-                                    }}
-                                >
-                                    Кредитные каникулы
-                                </AppTextBold>
-                                <FlatList
-                                    style={{ marginBottom: 0, marginTop: 10 }}
-                                    data={credit.holidays}
-                                    renderItem={({ item }) => (
-                                        <Holiday remove={deleteHolidayHandler} holiday={item} />
-                                    )}
-                                    keyExtractor={(item) => item.id.toString()}
-                                />
-                            </View>
-                        )}
-
-                        <View style={styles.buttons}>
-                            <View style={styles.button}>
-                                <AppButton onPress={() => setModalVisible(true)}>
-                                    <Text>Изменить</Text>
-                                </AppButton>
-                            </View>
-                            <View style={styles.button}>
-                                <AppButton
-                                    onPress={() => setModalRVisible(true)}
-                                    color={COLORS.MAIN_COLOR}
-                                >
-                                    <Text>Внести платеж</Text>
-                                </AppButton>
-                            </View>
-                            <View style={styles.button}>
-                                <AppButton onPress={() => setModalSVisible(true)}>
-                                    <Text>График</Text>
-                                </AppButton>
-                            </View>
-                        </View>
-
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                            }}
-                        >
-                            <View
-                                style={{
-                                    width: '99%',
-                                }}
-                            >
-                                <AppButton
-                                    onPress={() => setModalHVisible(true)}
-                                    color={COLORS.DANGER_COLOR}
-                                >
-                                    <Text>Пропустить платеж</Text>
-                                </AppButton>
-                            </View>
-                        </View>
-
-                        <View style={styles.buttons}>
-                            <View style={styles.button}>
-                                <AppButton
-                                    onPress={() => {
-                                        dispatch(getCreditsAsync())
-                                        router.back()
-                                    }}
-                                    color={COLORS.MAIN_BLUE_5}
-                                >
-                                    <Text>Назад</Text>
-                                </AppButton>
-                            </View>
-                            <View style={styles.button}>
-                                <AppButton onPress={deleteCreditHandler} color={COLORS.MAIN_BLUE_5}>
-                                    <Text>Удалить кредит</Text>
-                                </AppButton>
-                            </View>
-                        </View>
-                    </ScrollView>
+                    />
+                    
                     {/* Используйте светлую строку состояния в iOS, чтобы учесть черное пространство над модальным */}
                     <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
                 </Padding>
