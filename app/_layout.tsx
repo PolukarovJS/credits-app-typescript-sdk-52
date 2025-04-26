@@ -10,6 +10,7 @@ import { useDataBase } from './../src/hooks/useBase'
 import { useAppDispatch } from './../src/hooks/hook'
 import { getCreditsAsync } from '../src/redux/reducers/credits-reducer'
 import { COLORS } from '../constants/theme'
+import { StatusBar } from 'expo-status-bar'
 
 export {
     // Улавливать любые ошибки, генерируемые компонентом компоновки.
@@ -69,56 +70,59 @@ export default function RootLayout() {
         }, [])
 
         return (
-            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                <Stack>
-                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                    <Stack.Screen
-                        name="credit"
-                        options={{
-                            presentation: 'transparentModal',
-                            animation: 'fade',
-                            headerTitle: 'Информация о кредите',
-                            headerTitleStyle: {
-                                color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
-                            },
-                            headerStyle: {
-                                backgroundColor:
-                                    colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
-                            },
-                        }}
-                    />
-                    <Stack.Screen
-                        name="AddCredit"
-                        options={{
-                            presentation: 'modal',
-                            animation: 'slide_from_left',
-                            headerTitle: 'Добавление кредита',
-                            headerTitleStyle: {
-                                color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
-                            },
-                            headerStyle: {
-                                backgroundColor:
-                                    colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
-                            },
-                        }}
-                    />
-                    <Stack.Screen
-                        name="tempCredit"
-                        options={{
-                            presentation: 'modal',
-                            animation: 'slide_from_left',
-                            headerTitle: 'Параметры кредита',
-                            headerTitleStyle: {
-                                color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
-                            },
-                            headerStyle: {
-                                backgroundColor:
-                                    colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
-                            },
-                        }}
-                    />
-                </Stack>
-            </ThemeProvider>
+                <>
+                <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+                <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                    <Stack>
+                        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                        <Stack.Screen
+                            name="credit"
+                            options={{
+                                presentation: 'transparentModal',
+                                animation: 'fade',
+                                headerTitle: 'Информация о кредите',
+                                headerTitleStyle: {
+                                    color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
+                                },
+                                headerStyle: {
+                                    backgroundColor:
+                                        colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
+                                },
+                            }}
+                        />
+                        <Stack.Screen
+                            name="AddCredit"
+                            options={{
+                                presentation: 'modal',
+                                animation: 'slide_from_left',
+                                headerTitle: 'Добавление кредита',
+                                headerTitleStyle: {
+                                    color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
+                                },
+                                headerStyle: {
+                                    backgroundColor:
+                                        colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
+                                },
+                            }}
+                        />
+                        <Stack.Screen
+                            name="tempCredit"
+                            options={{
+                                presentation: 'modal',
+                                animation: 'slide_from_left',
+                                headerTitle: 'Параметры кредита',
+                                headerTitleStyle: {
+                                    color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
+                                },
+                                headerStyle: {
+                                    backgroundColor:
+                                        colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
+                                },
+                            }}
+                        />
+                    </Stack>
+                </ThemeProvider>
+                </>
         )
     }
 }

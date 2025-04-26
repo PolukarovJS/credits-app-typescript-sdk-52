@@ -1,5 +1,10 @@
 {
   "expo": {
+    "androidStatusBar": {
+      "backgroundColor": "#000000",
+      "translucent": true,
+      "barStyle": "light-content"
+    },
     "name": "credits-app-typescript-sdk-52",
     "slug": "credits-app-typescript-sdk-52",
     "version": "1.0.0",
@@ -9,7 +14,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "userInterfaceStyle": "automatic",
+      "infoPlist": {
+        "UIViewControllerBasedStatusBarAppearance": true
+      }
     },
     "android": {
       "adaptiveIcon": {
