@@ -1,7 +1,11 @@
 import { AntDesign, FontAwesome, Foundation } from '@expo/vector-icons'
 import React, { FC, useEffect, useState, useMemo, useCallback } from 'react'
 import { Alert, StyleSheet, Text, TextInput, View, useColorScheme } from 'react-native'
-import { createCreditAsync, getCreditsAsync, setTempCredit } from '../../src/redux/reducers/credits-reducer'
+import {
+    createCreditAsync,
+    getCreditsAsync,
+    setTempCredit,
+} from '../../src/redux/reducers/credits-reducer'
 import { AppButton } from '../../components/ui/AppButton'
 import { AppDateInput } from '../../components/ui/AppDateInput'
 import { AppTextBold } from '../../components/ui/AppTextBold'
@@ -28,34 +32,38 @@ const AddCredit: FC = () => {
     const { credits } = useAppSelector((state) => state.creditsPage)
     const [sumPay, setSumPay] = useState(0)
     const [sumCurrentBalance, setCurrentBalance] = useState(0)
-    
+
     // Оптимизация вычисления суммарного платежа и баланса
     const { totalPayment, totalBalance } = useMemo(() => {
-        let sums = 0;
-        let sumsBalance = 0;
+        let sums = 0
+        let sumsBalance = 0
         credits.forEach((element) => {
             const sp =
                 element.sum *
                 (element.percents / 1200 +
-                    element.percents / 1200 / ((1 + element.percents / 1200) ** element.term - 1));
-            sums = sums + sp;
+                    element.percents / 1200 / ((1 + element.percents / 1200) ** element.term - 1))
+            sums = sums + sp
 
-            const currentCredit = currentInfoCredit(element).balanceLoanDebt as number;
-            sumsBalance = sumsBalance + currentCredit;
-        });
-        return { totalPayment: sums, totalBalance: sumsBalance };
-    }, [credits]);
+            const currentCredit = currentInfoCredit(element).balanceLoanDebt as number
+            sumsBalance = sumsBalance + currentCredit
+        })
+        return { totalPayment: sums, totalBalance: sumsBalance }
+    }, [credits])
 
     // Используйте вычисленные значения
     useEffect(() => {
-        setSumPay(totalPayment);
-        setCurrentBalance(totalBalance);
-    }, [totalPayment, totalBalance]);
+        setSumPay(totalPayment)
+        setCurrentBalance(totalBalance)
+    }, [totalPayment, totalBalance])
 
     const [credit, setCredit] = useState(defaultCredit)
-    
-    const {calculatedPayment, calculatedFullInterests, calculatedFullPayment } = calculateAnnuity(defaultCredit.sum, defaultCredit.term, defaultCredit.percents)
-    
+
+    const { calculatedPayment, calculatedFullInterests, calculatedFullPayment } = calculateAnnuity(
+        defaultCredit.sum,
+        defaultCredit.term,
+        defaultCredit.percents
+    )
+
     const [payment, setPayment] = useState(calculatedPayment.toFixed(2))
     const [fullInterestsD, setFullInterestsD] = useState(calculatedFullInterests.toFixed(2))
     const [fullPaymentD, setFullPaymentD] = useState(calculatedFullPayment.toFixed(2))
@@ -95,14 +103,15 @@ const AddCredit: FC = () => {
     // Оптимизация функции расчета платежа
     const calculate = useCallback((sum: number, term: number, percentages: number) => {
         if (percentages.toString().trim() && sum.toString().trim() && term.toString().trim()) {
-            const {calculatedPayment, calculatedFullInterests, calculatedFullPayment } = calculateAnnuity(sum, term, percentages)
-            setPayment(calculatedPayment.toFixed(2));
-            setFullInterestsD(calculatedFullInterests.toFixed(2));
-            setFullPaymentD(calculatedFullPayment.toFixed(2));
+            const { calculatedPayment, calculatedFullInterests, calculatedFullPayment } =
+                calculateAnnuity(sum, term, percentages)
+            setPayment(calculatedPayment.toFixed(2))
+            setFullInterestsD(calculatedFullInterests.toFixed(2))
+            setFullPaymentD(calculatedFullPayment.toFixed(2))
         } else {
-            Alert.alert('Введите обязательные поля!');
+            Alert.alert('Введите обязательные поля!')
         }
-    }, []);
+    }, [])
 
     // const saveHandler = () => {
     //     if (credit.date && credit.dayOfPay && credit.sum && credit.term && credit.percents) {
@@ -116,12 +125,12 @@ const AddCredit: FC = () => {
     // Оптимизация обработчиков событий
     const saveHandler = useCallback(() => {
         if (credit.date && credit.dayOfPay && credit.sum && credit.term && credit.percents) {
-            dispatch(createCreditAsync(credit));
-            setCredit(defaultCredit);
+            dispatch(createCreditAsync(credit))
+            setCredit(defaultCredit)
         } else {
-            Alert.alert('Введите обязательные поля!');
+            Alert.alert('Введите обязательные поля!')
         }
-    }, [credit, defaultCredit, dispatch]);
+    }, [credit, defaultCredit, dispatch])
 
     const setDefaultCredit = () => {
         setCredit(defaultCredit)
@@ -284,13 +293,17 @@ const AddCredit: FC = () => {
                 {
                     text: 'OK',
                     onPress: async () => {
-                        await creditsAPI.deleteCredits()
-                            .then(() => console.log('Все кредиты успешно удалены! {index.tsx, deleteAllCredits}')                           )
+                        await creditsAPI
+                            .deleteCredits()
+                            .then(() =>
+                                console.log('Все кредиты успешно удалены! {index.tsx, deleteAllCredits}')
+                            )
                         // Если БД не существует, то создаем её
-                        await creditsAPI.init()
-                           .then(() => {console.log('Database loaded! {index.tsx, deleteAllCredits}')
+                        await creditsAPI.init().then(() => {
+                            console.log('Database loaded! {index.tsx, deleteAllCredits}')
                             /* setIsLoadDB(true) */
                         })
+                        await creditsAPI.migrateIndexes()
                         dispatch(getCreditsAsync())
                     },
                     style: 'destructive',

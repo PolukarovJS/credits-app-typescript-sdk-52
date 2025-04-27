@@ -82,6 +82,7 @@ const Credit = () => {
     const deleteAllRepaymentsHandler = () => {
         for (let index = 0; index < credit.repayments.length; index++) {
             const repayment = credit.repayments[index]
+
             if (new Date(repayment.date).getTime() > new Date(Date.now()).getTime()) {
                 dispatch(deleteRepaymentAsync(repayment.id))
             }
@@ -341,7 +342,10 @@ const Credit = () => {
                     />
 
                     <FlatList
-                        data={credit.repayments && credit.repayments.length > 0 ? credit.repayments : []}
+                        data={credit.repayments || []}
+                        initialNumToRender={10}
+                        maxToRenderPerBatch={10}
+                        windowSize={5}
                         renderItem={({ item }) => (
                             <Repayment remove={deleteRepaymentHandler} repayment={item} />
                         )}

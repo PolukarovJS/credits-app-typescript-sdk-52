@@ -18,7 +18,7 @@ const saveLastDatabase = async (dbName: string) => {
     }
 }
 
-const AddCredit: FC = () => {
+const ServicesBD: FC = () => {
     const [dbName, setDbName] = useState('')
     const [databases, setDatabases] = useState<string[]>([])
     const [selectedDb, setSelectedDb] = useState<string>('')
@@ -93,12 +93,11 @@ const AddCredit: FC = () => {
             Alert.alert('Ошибка', 'Введите имя базы данных')
             return
         }
-        creditsAPI
-            .createDatabase(dbName)
-            //.then(() => Alert.alert(`Успех', 'База данных ${dbName}.db успешно создана`))
-            //.catch((error) =>
-            //    Alert.alert('Ошибка', `Не удалось создать базу данных ${dbName}.db: ` + error)
-            //)
+        creditsAPI.createDatabase(dbName)
+        //.then(() => Alert.alert(`Успех', 'База данных ${dbName}.db успешно создана`))
+        //.catch((error) =>
+        //    Alert.alert('Ошибка', `Не удалось создать базу данных ${dbName}.db: ` + error)
+        //)
     }
 
     useEffect(() => {
@@ -116,7 +115,7 @@ const AddCredit: FC = () => {
                 <Picker
                     selectedValue={selectedDb}
                     style={{
-                        height: 40,
+                        height: 50,
                         ...themeContainerStyle,
                         ...themeTextStyle,
                     }}
@@ -170,7 +169,7 @@ const AddCredit: FC = () => {
     )
 }
 
-export default AddCredit
+export default ServicesBD
 
 const styles = StyleSheet.create({
     buttons: {

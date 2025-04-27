@@ -70,7 +70,7 @@ export default function RootLayout() {
         }, [])
 
         return (
-                <>
+            <>
                 <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
                 <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
                     <Stack>
@@ -82,11 +82,16 @@ export default function RootLayout() {
                                 animation: 'fade',
                                 headerTitle: 'Информация о кредите',
                                 headerTitleStyle: {
-                                    color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
+                                    color:
+                                        colorScheme === 'dark'
+                                            ? COLORS.MAIN_BLUE_2
+                                            : COLORS.MAIN_BLACK_1,
                                 },
                                 headerStyle: {
                                     backgroundColor:
-                                        colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
+                                        colorScheme === 'dark'
+                                            ? COLORS.MAIN_BLACK_1
+                                            : COLORS.MAIN_BLUE_2,
                                 },
                             }}
                         />
@@ -94,35 +99,45 @@ export default function RootLayout() {
                             name="AddCredit"
                             options={{
                                 presentation: 'modal',
-                                animation: 'slide_from_left',
+                                animation: 'fade',
                                 headerTitle: 'Добавление кредита',
                                 headerTitleStyle: {
-                                    color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
+                                    color:
+                                        colorScheme === 'dark'
+                                            ? COLORS.MAIN_BLUE_2
+                                            : COLORS.MAIN_BLACK_1,
                                 },
                                 headerStyle: {
                                     backgroundColor:
-                                        colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
+                                        colorScheme === 'dark'
+                                            ? COLORS.MAIN_BLACK_1
+                                            : COLORS.MAIN_BLUE_2,
                                 },
                             }}
                         />
                         <Stack.Screen
                             name="tempCredit"
                             options={{
-                                presentation: 'modal',
+                                presentation: 'transparentModal',
                                 animation: 'slide_from_left',
                                 headerTitle: 'Параметры кредита',
                                 headerTitleStyle: {
-                                    color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
+                                    color:
+                                        colorScheme === 'dark'
+                                            ? COLORS.MAIN_BLUE_2
+                                            : COLORS.MAIN_BLACK_1,
                                 },
                                 headerStyle: {
                                     backgroundColor:
-                                        colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
+                                        colorScheme === 'dark'
+                                            ? COLORS.MAIN_BLACK_1
+                                            : COLORS.MAIN_BLUE_2,
                                 },
                             }}
                         />
                     </Stack>
                 </ThemeProvider>
-                </>
+            </>
         )
     }
 }

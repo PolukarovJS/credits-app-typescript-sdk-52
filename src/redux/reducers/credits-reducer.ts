@@ -3,10 +3,9 @@ import { Alert } from 'react-native'
 import { creditsAPI } from '../../api/credits-api'
 import { HolidayType, CreditType, RepaymentType, TypeRepayment } from '../../../src/types'
 import { AppThunk } from '../redux-store'
-import { createSelector } from 'reselect';
-import { RootState } from '../redux-store';
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import * as SQLite from 'expo-sqlite'
+import { createSelector } from 'reselect'
+import { RootState } from '../redux-store'
+import Toast from 'react-native-toast-message'
 const initialState = {
     credits: [] as CreditType[],
     tempCredit: {
@@ -186,7 +185,12 @@ export const createRepaymentAsync = createAsyncThunk(
                 id_credit: credit.id,
                 type: type,
             }
-            Alert.alert('Добавление платежа', 'Платеж успешно добавлен!')
+            // Alert.alert('Добавление платежа', 'Платеж успешно добавлен!')
+            Toast.show({
+                type: 'success',
+                text1: 'Добавлен очередной досрочный платеж',
+                text2: 'Ваш досрочный платеж успешно добавлен в список',
+            })
             return { repayment, id: credit.id }
         } catch (error: any) {
             Alert.alert('Ошибка добавления платежа', error.message)
@@ -434,21 +438,19 @@ export const setTempCredit = (credit: CreditType): AppThunk => {
 
 export default creditsSlice.reducer
 
-export const selectAllCredits = (state: RootState) => state.creditsPage.credits;
+export const selectAllCredits = (state: RootState) => state.creditsPage.credits
 
 export const selectCreditById = createSelector(
     [selectAllCredits, (_, creditId: number) => creditId],
-    (credits, creditId) => credits.find(credit => credit.id === creditId)
-  );
-  
-export const selectTotalPayment = createSelector(
-    [selectAllCredits],
-    (credits) => {
-      return credits.reduce((total, credit) => {
-        const payment = credit.sum * 
-          (credit.percents / 1200 + 
-           credit.percents / 1200 / ((1 + credit.percents / 1200) ** credit.term - 1));
-        return total + payment;
-      }, 0);
-    }
-  );
+    (credits, creditId) => credits.find((credit) => credit.id === creditId)
+)
+
+export const selectTotalPayment = createSelector([selectAllCredits], (credits) => {
+    return credits.reduce((total, credit) => {
+        const payment =
+            credit.sum *
+            (credit.percents / 1200 +
+                credit.percents / 1200 / ((1 + credit.percents / 1200) ** credit.term - 1))
+        return total + payment
+    }, 0)
+})

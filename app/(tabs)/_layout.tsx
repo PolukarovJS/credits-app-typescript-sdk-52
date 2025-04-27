@@ -22,10 +22,8 @@ export default function TabLayout() {
             screenOptions={{
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
                 tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
-                tabBarActiveBackgroundColor:
-                    Colors[colorScheme ?? 'light'].tabBarBackgroundColor,
-                tabBarInactiveBackgroundColor:
-                    Colors[colorScheme ?? 'light'].tabBarBackgroundColor,
+                tabBarActiveBackgroundColor: Colors[colorScheme ?? 'light'].tabBarBackgroundColor,
+                tabBarInactiveBackgroundColor: Colors[colorScheme ?? 'light'].tabBarBackgroundColor,
             }}
         >
             <Tabs.Screen
@@ -37,8 +35,7 @@ export default function TabLayout() {
                         color: Colors[colorScheme ?? 'dark'].headerTitleColor,
                     },
                     headerStyle: {
-                        backgroundColor:
-                            Colors[colorScheme ?? 'light'].tabBarBackgroundColor,
+                        backgroundColor: Colors[colorScheme ?? 'light'].tabBarBackgroundColor,
                     },
                     tabBarIcon: ({ color }) => (
                         <TabBarIcon name="credit-card-plus-outline" color={color} />
@@ -50,9 +47,7 @@ export default function TabLayout() {
                                     name="information-outline"
                                     size={25}
                                     color={
-                                        colorScheme === 'dark'
-                                            ? COLORS.MAIN_BLUE_2
-                                            : COLORS.MAIN_BLACK_1
+                                        colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1
                                     }
                                     style={{
                                         marginRight: 15,
@@ -70,16 +65,11 @@ export default function TabLayout() {
                     title: 'Кредиты',
                     headerTitle: 'Кредиты',
                     headerTitleStyle: {
-                        color:
-                            colorScheme === 'dark'
-                                ? COLORS.MAIN_BLUE_2
-                                : COLORS.MAIN_BLACK_1,
+                        color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
                     },
                     headerStyle: {
                         backgroundColor:
-                            colorScheme === 'dark'
-                                ? COLORS.MAIN_BLACK_1
-                                : COLORS.MAIN_BLUE_2,
+                            colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
                     },
                     tabBarIcon: ({ color }) => (
                         <TabBarIcon name="credit-card-multiple-outline" color={color} />
@@ -107,42 +97,28 @@ export default function TabLayout() {
                     title: 'Аналитика',
                     headerTitle: 'Аналитика',
                     headerTitleStyle: {
-                        color:
-                            colorScheme === 'dark'
-                                ? COLORS.MAIN_BLUE_2
-                                : COLORS.MAIN_BLACK_1,
+                        color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
                     },
                     headerStyle: {
                         backgroundColor:
-                            colorScheme === 'dark'
-                                ? COLORS.MAIN_BLACK_1
-                                : COLORS.MAIN_BLUE_2,
+                            colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
                     },
-                    tabBarIcon: ({ color }) => (
-                        <TabBarIcon name="home-analytics" color={color} />
-                    ),
+                    tabBarIcon: ({ color }) => <TabBarIcon name="home-analytics" color={color} />,
                 }}
             />
             <Tabs.Screen
-                name="Services BD"
+                name="ServicesBD"
                 options={{
                     title: 'Управление БД',
                     headerTitle: 'Управление доступом к БД',
                     headerTitleStyle: {
-                        color:
-                            colorScheme === 'dark'
-                                ? COLORS.MAIN_BLUE_2
-                                : COLORS.MAIN_BLACK_1,
+                        color: colorScheme === 'dark' ? COLORS.MAIN_BLUE_2 : COLORS.MAIN_BLACK_1,
                     },
                     headerStyle: {
                         backgroundColor:
-                            colorScheme === 'dark'
-                                ? COLORS.MAIN_BLACK_1
-                                : COLORS.MAIN_BLUE_2,
+                            colorScheme === 'dark' ? COLORS.MAIN_BLACK_1 : COLORS.MAIN_BLUE_2,
                     },
-                    tabBarIcon: ({ color }) => (
-                        <TabBarIcon name="store-settings" color={color} />
-                    ),
+                    tabBarIcon: ({ color }) => <TabBarIcon name="store-settings" color={color} />,
                 }}
             />
         </Tabs>
